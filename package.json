@@ -1,0 +1,25 @@
+{
+  "name": "mapping",
+  "version": "1.0.0",
+  "description": "",
+  "main": "mapping.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --reporter spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bitid-open-source-iot/mapping.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bitid-open-source-iot/mapping/issues"
+  },
+  "homepage": "https://github.com/bitid-open-source-iot/mapping#readme",
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "q": "^1.5.1"
+  }
+}

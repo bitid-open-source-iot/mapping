@@ -1,0 +1,19 @@
+<mat-button-toggle-group vertical="true" [value]="mode" (change)="change($event)" *ngIf="editing">
+	<mat-button-toggle value="hand" matTooltip="Move Mode" matTooltipPosition="before">
+        <mat-icon>
+        	drag_handle
+        </mat-icon>
+    </mat-button-toggle>
+    
+    <mat-button-toggle value="polygon" matTooltip="Draw Polygon" matTooltipPosition="before">
+        <mat-icon>
+            crop_square
+        </mat-icon>
+    </mat-button-toggle>
+
+<!--     <mat-button-toggle value="circle" matTooltip="Draw Circle" matTooltipPosition="before">
+        <mat-icon>
+        	radio_button_unchecked
+        </mat-icon>
+    </mat-button-toggle> -->
+</mat-button-toggle-group>

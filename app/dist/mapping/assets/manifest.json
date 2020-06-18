@@ -1,0 +1,21 @@
+{
+    "icons": [
+        {
+            "src":      "/assets/icon.png",
+            "type":     "image/png",
+            "sizes":    "192x192"
+        },
+        {
+            "src":      "/assets/icon-512.png",
+            "type":     "image/png",
+            "sizes":    "512x512"
+        }
+    ],
+    "name":             "Mapping",
+    "scope":            "/",
+    "display":          "standalone",
+    "start_url":        "/",
+    "short_name":       "Mapping",
+    "theme_color":      "#3F51B5",
+    "background_color": "#3F51B5"
+}

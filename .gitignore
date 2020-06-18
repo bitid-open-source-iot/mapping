@@ -1,0 +1,6 @@
+logs/*/
+logs/*.*
+config.json
+node_modules/
+test/config.json
+package-lock.json

@@ -1,0 +1,120 @@
+<mat-toolbar>
+	<mat-toolbar-row>
+		<button mat-icon-button (click)="menu.toggle()" *ngIf="menu.mode == 0" bit-branding bit-color>
+            <mat-icon>
+                menu
+            </mat-icon>
+        </button>
+
+        <label class="page-label" app-translate [app-translate-inner]="true" bit-branding bit-color>
+            Map
+        </label>
+
+        <div spacer></div>
+
+        <button mat-icon-button (click)="search()" [disabled]="HistoryMode" bit-branding bit-color>
+            <mat-icon>
+                search
+            </mat-icon>
+        </button>
+
+        <button mat-icon-button (click)="ToggleModes()" [disabled]="HistoryMode" bit-branding bit-color>
+            <mat-icon>
+                {{ editing ? 'remove_red_eye' : 'edit' }}
+            </mat-icon>
+        </button>
+	</mat-toolbar-row>
+</mat-toolbar>
+
+<mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+
+<agm-map #map [latitude]="center.latitude" [longitude]="center.longitude">
+    <agm-marker *ngFor="let device of devices"
+                [visible]="device.visible"
+                [iconUrl]="device.iconUrl"
+                [latitude]="device.location.latitude"
+                [longitude]="device.location.longitude"
+                [markerClickable]="true"
+                (markerClick)="SelectItem('device', device)">
+    </agm-marker>
+
+    <agm-polygon *ngFor="let zone of zones"
+                [attr.id]="zone.zoneId"
+                [paths]="zone.points"
+                [visible]="zone.visible"
+                [editable]="editing"
+                [geodesic]="false"
+                fillColor="#F44336"
+                [clickable]="true"
+                fillOpacity="0.1"
+                strokeColor="#FF0000"
+                strokeWeight="2"
+                strokeOpacity="1"
+                [polyDraggable]="false"
+                (polyClick)="SelectItem('zone', zone)"
+                (polyDragEnd)="ZoneDragEnd($event, zone)"
+                (polyDragStart)="ZoneDragStart($event, zone)"
+                (polyPathsChange)="ZonePathsChange($event, zone)">
+    </agm-polygon>
+
+    <agm-polyline strokeColor="#3F51B5" strokeWeight="4" [visible]="HistoryLineEnabled">
+        <agm-polyline-point *ngFor="let point of historical" [latitude]="point.location.latitude" [longitude]="point.location.longitude"></agm-polyline-point>
+    </agm-polyline>
+
+    <agm-marker *ngFor="let point of GetPointThatCanShow()" [visible]="HistoryMarkersEnabled" [latitude]="point.location.latitude" [longitude]="point.location.longitude" [label]="point.index" [title]="point.index" fillColor="#3F51B5" strokeColor="#3F51B5" [iconUrl]="SetIcons(point)">
+        <agm-info-window [disableAutoPan]="true">
+            <table class="agm-info-window-container">
+                <tr>
+                    <th>
+                        Order
+                    </th>
+                    <td>
+                        {{ point.index }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Latitude
+                    </th>
+                    <td>
+                        {{ point.location.latitude }}°
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Longitude
+                    </th>
+                    <td>
+                        {{ point.location.longitude }}°
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Last Update
+                    </th>
+                    <td>
+                        {{ point.serverDate ? (point.serverDate | date : 'medium') : '-' }}
+                    </td>
+                </tr>
+                <tr *ngFor="let item of point.data">
+                    <th>
+                        {{ item.description }}
+                    </th>
+                    <td>
+                        {{ item.value }} {{ item.units != 'NA' ? item.units : '' }}
+                    </td>
+                </tr>
+            </table>
+        </agm-info-window>
+    </agm-marker>
+
+    <agm-marker [visible]="TrackerMarker.visible" [latitude]="TrackerMarker.latitude" [longitude]="TrackerMarker.longitude" fillColor="#3F51B5" strokeColor="#3F51B5"></agm-marker>
+</agm-map>
+
+<app-drawing-mode [editing]="editing"></app-drawing-mode>
+
+<app-zone [zone]="zone" [editing]="editing" *ngIf="ZoneSelected" [@inOutAnimation]></app-zone>
+
+<app-device [device]="device" [editing]="editing" (update)="SetDeviceProperties($event)" *ngIf="DeviceSelected" [@inOutAnimation]></app-device>
+
+<app-history-mode [data]="historical" [animating]="animating" [description]="device.description" (close)="cancelhistory()" (lines)="ToggleHistoryLines($event)" (points)="ToggleHistoryPoints($event)" (animate)="animate($event)" *ngIf="HistoryMode" [@inOutAnimation]></app-history-mode>

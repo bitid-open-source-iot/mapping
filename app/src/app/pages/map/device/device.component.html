@@ -1,0 +1,185 @@
+<mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+
+<h3>
+	<span app-translate [app-translate-inner]="true" bit-branding bit-color>
+		Device Details
+	</span>
+
+	<button mat-icon-button [matMenuTriggerFor]="devicemenu" bit-branding bit-color>
+		<mat-icon>
+			more_vert
+		</mat-icon>
+	</button>
+
+	<mat-menu #devicemenu="matMenu">
+		<button mat-menu-item (click)="zones()">
+			<mat-icon>
+				crop_square
+			</mat-icon>
+	
+			<span app-translate [app-translate-inner]="true">
+				Zones
+			</span>
+		</button>
+		
+		<button mat-menu-item (click)="share()">
+			<mat-icon>
+				share
+			</mat-icon>
+			
+			<span app-translate [app-translate-inner]="true">
+				Share
+			</span>
+		</button>
+		
+		<button mat-menu-item (click)="history()">
+			<mat-icon>
+				history
+			</mat-icon>
+	
+			<span app-translate [app-translate-inner]="true">
+				History
+			</span>
+		</button>
+	
+		<button mat-menu-item (click)="delete()">
+			<mat-icon color="warn">
+				delete
+			</mat-icon>
+	
+			<span app-translate [app-translate-inner]="true">
+				Delete
+			</span>
+		</button>
+		
+		<button mat-menu-item (click)="subscribers()">
+			<mat-icon>
+				people
+			</mat-icon>
+	
+			<span app-translate [app-translate-inner]="true">
+				Subscribers
+			</span>
+		</button>
+		
+		<button mat-menu-item (click)="unsubscribe()">
+			<mat-icon color="warn">
+				remove
+			</mat-icon>
+	
+			<span app-translate [app-translate-inner]="true">
+				Unsubscribe
+			</span>
+		</button>
+		
+		<button mat-menu-item *ngIf="locatracking.visible(device.typeId)" (click)="locatracking.open(device)">
+			<mat-icon>
+				settings
+			</mat-icon>
+	
+			Loca Tracking Settings
+		</button>
+	</mat-menu>
+</h3>
+
+<mat-list *ngIf="!editing">
+	<mat-list-item>
+		<h4 mat-line app-translate [app-translate-inner]="true">
+			description
+		</h4>
+		<p mat-line>
+            {{ device.description }}
+		</p>
+ 	</mat-list-item>
+
+ 	<mat-list-item>
+		<h4 mat-line app-translate [app-translate-inner]="true">
+			device id
+		</h4>
+		<p mat-line>
+            {{ device.deviceId }}
+		</p>
+ 	</mat-list-item>
+
+ 	<mat-list-item>
+		<h4 mat-line app-translate [app-translate-inner]="true">
+			latitude
+		</h4>
+		<p mat-line>
+            {{ device.location.latitude }}
+		</p>
+	</mat-list-item>
+
+	<mat-list-item>
+		<h4 mat-line app-translate [app-translate-inner]="true">
+			longitude
+		</h4>
+		<p mat-line>
+            {{ device.location.longitude }}
+		</p>
+ 	</mat-list-item>
+
+	<mat-list-item>
+		<h4 mat-line app-translate [app-translate-inner]="true">
+			last update
+		</h4>
+		<p mat-line>
+            {{ device.lastcomms ? device.lastcomms : '...' }}
+		</p>
+ 	</mat-list-item>
+
+	<h3 mat-subheader *ngIf="device.inputs.length > 0" app-translate [app-translate-inner]="true">
+		Inputs
+	</h3>
+</mat-list>
+
+<mat-list class="inputs-container" *ngIf="!editing">
+	<mat-list-item *ngFor="let input of device.inputs">
+		<h4 mat-line>
+			{{ input.description }}
+		</h4>
+		<p mat-line>
+			{{ input.value }}{{ input.type == 'analog' ? input.units : '' }}
+		</p>
+ 	</mat-list-item>
+</mat-list>
+
+<app-file-upload [file]="device.mapping.icon" (result)="SetDeviceIcon($event, device)" *ngIf="editing"></app-file-upload>
+
+<form [formGroup]="form" (ngSubmit)="!form.invalid && update()" *ngIf="editing">
+    <mat-form-field appearance="outline">
+        <mat-label app-translate [app-translate-inner]="true">
+            Description
+        </mat-label>
+        
+        <input matInput type="text" name="description" placeholder="description" formControlName="description" required>
+        
+        <mat-error align="start" *ngIf="errors.description" class="form__error">
+            {{ errors.description }}
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label app-translate [app-translate-inner]="true">
+            Sharing Rules
+        </mat-label>
+        
+        <mat-select name="organizationOnly" formControlName="organizationOnly" placeholder="organizationOnly" required>
+            <mat-option [value]="0" app-translate [app-translate-inner]="true">
+                Anyone Can Share
+            </mat-option>
+
+            <mat-option [value]="1" app-translate [app-translate-inner]="true">
+                Organization Only
+            </mat-option>
+        </mat-select>
+
+        <mat-error align="start" *ngIf="errors.organizationOnly" class="form__error">
+            {{ errors.organizationOnly }}
+        </mat-error>
+    </mat-form-field>
+
+    <button type="submit" mat-flat-button color="primary">
+    	update
+    </button>
+</form>

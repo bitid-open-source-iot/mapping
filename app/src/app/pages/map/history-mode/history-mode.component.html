@@ -1,0 +1,41 @@
+<mat-toolbar>
+	<mat-toolbar-row>
+        <label>
+			<span app-translate [app-translate-inner]="true">History for</span> {{ description }}
+        </label>
+
+        <div spacer></div>
+
+        <button mat-icon-button (click)="close()">
+            <mat-icon>
+                close
+            </mat-icon>
+        </button>
+	</mat-toolbar-row>
+</mat-toolbar>
+
+<div class="button-container">
+    <button mat-icon-button (click)="animation()" matTooltip="Animate Device">
+        <mat-icon color="primary">
+            {{ animating ? 'pause' : 'play_arrow' }}
+        </mat-icon>
+    </button>
+
+    <button mat-icon-button class="toggle" [class.enabled]="options.lines" matTooltip="Toggle line" (click)="ToggleLines()">
+        <mat-icon>
+            linear_scale
+        </mat-icon>
+    </button>
+
+    <button mat-icon-button class="toggle" [class.enabled]="options.points" matTooltip="Toggle points" (click)="TogglePoints()">
+        <mat-icon>
+            location_searching
+        </mat-icon>
+    </button>
+
+    <button mat-icon-button (click)="OpenTable()" matTooltip="View data in table format">
+        <mat-icon color="primary">
+            table_chart
+        </mat-icon>
+    </button>
+</div>

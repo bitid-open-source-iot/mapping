@@ -1,0 +1,54 @@
+<mat-toolbar color="primary">
+    <mat-toolbar-row>
+        <div class="label" app-translate [app-translate-inner]="true" bit-branding bit-color>
+            sign in
+        </div>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-progress-bar class="mapping-progress-bar" mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+
+<div fxLayout="row" class="login-container">
+    <div fxFlexOffset="40" fxFlex="20" fxFlexOffset.lg="35" fxFlex.lg="30" fxFlexOffset.md="30" fxFlex.md="40" fxFlexOffset.sm="20" fxFlex.sm="60" fxFlexOffset.xs="5" fxFlex.xs="90">
+
+        <img class="logo" [src]="brand.icon ? brand.icon : './assets/icon-512.png'">
+
+        <form [formGroup]="form" (ngSubmit)="!form.invalid && login()">
+            <div class="loading-overlay" *ngIf="loading"></div>
+
+            <mat-form-field appearance="outline">
+                <mat-label app-translate [app-translate-inner]="true">
+                    Email
+                </mat-label>
+
+                <input type="email" name="email" matInput placeholder="Email" formControlName="email" required>
+                
+                <mat-error align="start" *ngIf="errors.email" class="form__error">
+                    {{ errors.email }}
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label app-translate [app-translate-inner]="true">
+                    Password
+                </mat-label>
+
+                <input type="password" name="password" matInput placeholder="Password" formControlName="password" required>
+
+                <button type="button" mat-icon-button matSuffix color="primary" (click)="resetpassword()">
+                    <mat-icon>
+                        help
+                    </mat-icon>
+                </button>
+                
+                <mat-error align="start" *ngIf="errors.email" class="form__error">
+                    {{ errors.email }}
+                </mat-error>
+            </mat-form-field>
+
+            <button type="submit" mat-flat-button color="primary" app-translate [app-translate-inner]="true">
+                sign In
+            </button>
+        </form>
+    </div>
+</div>

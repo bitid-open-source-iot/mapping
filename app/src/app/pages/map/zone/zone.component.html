@@ -1,0 +1,113 @@
+<mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+
+<h3>
+	<span app-translate [app-translate-inner]="true" bit-branding bit-color>
+		Zone Details
+	</span>
+
+	<button mat-icon-button [matMenuTriggerFor]="zonemenu" bit-branding bit-color>
+        <mat-icon>
+            more_vert
+        </mat-icon>
+    </button>
+
+	<mat-menu #zonemenu="matMenu">
+		<button mat-menu-item (click)="share()">
+			<mat-icon>
+	            share
+	        </mat-icon>
+
+			<span app-translate [app-translate-inner]="true">
+				Share
+			</span>
+		</button>
+
+		<button mat-menu-item (click)="delete()">
+			<mat-icon color="warn">
+	            delete
+	        </mat-icon>
+
+			<span app-translate [app-translate-inner]="true">
+				Delete
+			</span>
+		</button>
+		
+		<button mat-menu-item (click)="subscribers()">
+			<mat-icon>
+	            people
+	        </mat-icon>
+
+			<span app-translate [app-translate-inner]="true">
+				Subscribers
+			</span>
+		</button>
+		
+		<button mat-menu-item (click)="unsubscribe()">
+			<mat-icon color="warn">
+	            remove
+	        </mat-icon>
+
+			<span app-translate [app-translate-inner]="true">
+				Unsubscribe
+			</span>
+		</button>
+	</mat-menu>
+</h3>
+
+<mat-list *ngIf="!editing">
+	<mat-list-item>
+		<h4 mat-line app-translate [app-translate-inner]="true">
+			description
+		</h4>
+		<p mat-line>
+            {{ zone.description }}
+		</p>
+ 	</mat-list-item>
+
+ 	<mat-list-item>
+		<h4 mat-line app-translate [app-translate-inner]="true">
+			zone id
+		</h4>
+		<p mat-line>
+            {{ zone.zoneId }}
+		</p>
+ 	</mat-list-item>
+</mat-list>
+
+<form [formGroup]="form" (ngSubmit)="!form.invalid && update()" *ngIf="editing">
+    <mat-form-field appearance="outline">
+        <mat-label app-translate [app-translate-inner]="true">
+            Description
+        </mat-label>
+        
+        <input matInput type="text" name="description" placeholder="description" formControlName="description" required>
+        
+        <mat-error align="start" *ngIf="errors.description" class="form__error">
+            {{ errors.description }}
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label app-translate [app-translate-inner]="true">
+            Sharing Rules
+        </mat-label>
+        
+        <mat-select name="organizationOnly" formControlName="organizationOnly" placeholder="organizationOnly" required>
+            <mat-option [value]="0" app-translate [app-translate-inner]="true">
+                Anyone Can Share
+            </mat-option>
+
+            <mat-option [value]="1" app-translate [app-translate-inner]="true">
+                Organization Only
+            </mat-option>
+        </mat-select>
+
+        <mat-error align="start" *ngIf="errors.organizationOnly" class="form__error">
+            {{ errors.organizationOnly }}
+        </mat-error>
+    </mat-form-field>
+
+    <button type="submit" mat-flat-button color="primary" app-translate [app-translate-inner]="true">
+    	update
+    </button>
+</form>

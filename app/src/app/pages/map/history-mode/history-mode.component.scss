@@ -1,0 +1,31 @@
+mat-toolbar {
+	box-shadow: 		0px 1px 5px 0px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 	0px 1px 5px 0px rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
+	label {
+		font-size: 		14px;
+		text-transform: uppercase;
+	}
+}
+.button-container {
+	display: 			flex;
+	padding: 			15px 10px;
+	justify-content: 	space-between;
+	button {
+		flex: 				0 50px;
+		width: 				50px;
+		height: 			50px;
+		box-shadow: 		0px 1px 5px 0px rgba(0, 0, 0, 0.2);
+		-moz-box-shadow: 	0px 1px 5px 0px rgba(0, 0, 0, 0.2);
+		background-color: 	#FFFFFF;
+		-webkit-box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
+	}
+}
+.toggle {
+	color:				#4CAF50;
+	background-color: 	#FFFFFF;
+}
+.enabled {
+	color:				#FFFFFF;
+	background-color: 	#4CAF50 !important;
+}

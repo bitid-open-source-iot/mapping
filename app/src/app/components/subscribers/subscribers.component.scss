@@ -1,0 +1,20 @@
+.mat-column-role {
+    flex: 0 0 100px;
+}
+.mat-column-options {
+    flex:             0 0 40px;
+    padding-left:     12px;
+    padding-right:    12px !important;
+}
+mat-header-row {
+    min-height: 30px !important;
+}
+[mat-raised-button] {
+    width:      100%;
+    margin-top: 15px;
+}
+.table-container {
+    width:      100%;
+    overflow:   auto;
+    max-height: 50vh;
+}

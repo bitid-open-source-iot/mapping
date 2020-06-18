@@ -1,0 +1,196 @@
+<header style="background-image: url('./assets/header.jpg')">
+	<nav>
+		<img class="nav-logo" [src]="brand.icon ? brand.icon : './assets/icon-512.png'" draggable="false">
+
+		<div class="page" *ngFor="let page of pages" [class.active]="page.active" (click)="go(page)">
+			{{ page.title }}
+		</div>
+
+		<button mat-icon-button (click)="open()" bit-branding bit-color>
+			<mat-icon>
+				menu
+			</mat-icon>
+		</button>
+	</nav>
+
+	<div class="logo">
+		<img [src]="brand.icon ? brand.icon : './assets/icon-512.png'" draggable="false">
+	</div>
+
+	<div class="title" bit-branding bit-color>
+		{{ application }}
+	</div>
+
+	<button mat-raised-button (click)="link('https://play.google.com/store/apps/details?id=com.bitid.telemetry')">
+		<mat-icon bit-branding bit-color>
+			android
+		</mat-icon>
+
+		<span bit-branding bit-color>
+			Download on Google Play
+		</span>
+	</button>
+
+	<button mat-raised-button (click)="link('https://apps.apple.com/za/app/bitid-iot-dashboard/id1232155318')">
+		<mat-icon bit-branding bit-color>
+			android
+		</mat-icon>
+		
+		<span bit-branding bit-color>
+			Download on App Store
+		</span>
+	</button>
+</header>
+
+<div #aboutContainer class="about" fxLayout="row">
+    <div fxFlexOffset="25" fxFlex="50" fxFlexOffset.lg="20" fxFlex.lg="60" fxFlexOffset.md="15" fxFlex.md="70" fxFlexOffset.sm="10" fxFlex.sm="80" fxFlexOffset.xs="1" fxFlex.xs="98">
+    	<section>
+	    	<div class="label">
+	    		About
+	    	</div>
+
+	    	<p>
+	    		{{ application }} gives you the ability to track your devices <b>LIVE Tracking</b> with no delay. 
+	    	</p>
+
+	    	<p>
+	    		Use the <b>GEO Fencing</b> tool to monitor when your devices enter and leave their fences. 
+	    	</p>
+
+	    	<p>
+	    		<b>Notifications</b> can be configured for your devices via Email, Mobile Push, Slack & Trello. 
+	    	</p>
+
+	    	<p>
+	    		Go back in time and see a devices <b>Location History</b>
+	    	</p>
+    	</section>
+
+		<app-section-seporator icon="./assets/marker.png"></app-section-seporator>
+    </div>
+</div>
+
+<div #featuresContainer class="features" fxLayout="row">
+    <div fxFlexOffset="25" fxFlex="50" fxFlexOffset.lg="20" fxFlex.lg="60" fxFlexOffset.md="15" fxFlex.md="70" fxFlexOffset.sm="10" fxFlex.sm="80" fxFlexOffset.xs="1" fxFlex.xs="98">
+    	<section>
+	    	<div class="label">
+	    		Features
+	    	</div>
+
+	    	<table>
+	    		<tr>
+	    			<td>
+	    				Live Tracking:
+	    			</td>
+	    			<td>
+	    				Monitor devices live with no delay
+	    			</td>
+	    		</tr>
+	    		<tr>
+	    			<td>
+						Geofencing:
+	    			</td>
+	    			<td>
+						Draw a perimeter around your devices and see when they leave and enter the fence
+	    			</td>
+	    		</tr>
+	    		<tr>
+	    			<td>
+					    Notifications:
+	    			</td>
+	    			<td>
+						Configure custom notifications for events like a device entering/leaving a geofence and get notified via Email, Mobile Push Notifications, Slack & Trello
+	    			</td>
+	    		</tr>
+	    		<tr>
+	    			<td>
+						History:
+	    			</td>
+	    			<td>
+	    				The platform gives you the ability to view the location history of your device
+	    			</td>
+	    		</tr>
+	    		<tr>
+	    			<td>
+	    				Manage Devices:
+	    			</td>
+	    			<td>
+	    				Control your devices, share & edit your devices properties. Change it's icon and much more!
+	    			</td>
+	    		</tr>
+	    	</table>
+    	</section>
+
+		<app-section-seporator icon="./assets/map.png"></app-section-seporator>
+    </div>
+</div>
+
+<div #faqContainer class="faq" fxLayout="row">
+    <div fxFlexOffset="25" fxFlex="50" fxFlexOffset.lg="20" fxFlex.lg="60" fxFlexOffset.md="15" fxFlex.md="70" fxFlexOffset.sm="10" fxFlex.sm="80" fxFlexOffset.xs="1" fxFlex.xs="98">
+    	<section>
+	    	<div class="label">
+	    		Faq
+	    	</div>
+			
+			<mat-grid-list [cols]="cols" rowHeight="3:1" gutterSize="5px">
+				<mat-grid-tile>
+					<div class="question">
+						Adding a device
+					</div>
+					<img src="./assets/header.jpg">
+				</mat-grid-tile>
+				<mat-grid-tile>
+					<div class="question">
+						Creating Geofences
+					</div>
+					<img src="./assets/header.jpg">
+				</mat-grid-tile>
+				<mat-grid-tile>
+					<div class="question">
+						Setup Notifications
+					</div>
+					<img src="./assets/header.jpg">
+				</mat-grid-tile>
+				<mat-grid-tile>
+					<div class="question">
+						Getting a device subscription
+					</div>
+					<img src="./assets/header.jpg">
+				</mat-grid-tile>
+				<mat-grid-tile>
+					<div class="question">
+						Is my device connected
+					</div>
+					<img src="./assets/header.jpg">
+				</mat-grid-tile>
+				<mat-grid-tile>
+					<div class="question">
+						Sharing a device
+					</div>
+					<img src="./assets/header.jpg">
+				</mat-grid-tile>
+			</mat-grid-list>
+    	</section>
+
+		<app-section-seporator icon="./assets/map-signs.png"></app-section-seporator>
+    </div>
+</div>
+
+<div #newsContainer class="news" fxLayout="row">
+    <div fxFlexOffset="25" fxFlex="50" fxFlexOffset.lg="20" fxFlex.lg="60" fxFlexOffset.md="15" fxFlex.md="70" fxFlexOffset.sm="10" fxFlex.sm="80" fxFlexOffset.xs="1" fxFlex.xs="98">
+    	<section>
+	    	<div class="label">
+	    		News
+	    	</div>
+			
+			<mat-grid-list cols="1" rowHeight="8:1" gutterSize="5px">
+				<mat-grid-tile>
+					<div class="question">
+						New IoT Device takes over markets
+					</div>
+					<img src="./assets/header.jpg">
+				</mat-grid-tile>
+			</mat-grid-list>
+    	</section>
+    </div>
+</div>

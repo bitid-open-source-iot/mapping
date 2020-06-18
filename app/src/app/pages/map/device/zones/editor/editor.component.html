@@ -1,0 +1,37 @@
+<mat-toolbar>
+    <mat-toolbar-row>
+        <button mat-icon-button (click)="close()">
+            <mat-icon>
+                arrow_back
+            </mat-icon>
+        </button>
+
+        <label class="page-label" app-translate [app-translate-inner]="true">
+            {{ mode == 'add' ? 'Link Zone' : '' }}
+            {{ mode == 'edit' ? 'Edit Zone Link' : '' }}
+        </label>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<form [formGroup]="form" (ngSubmit)="!form.invalid && submit()">
+     <mat-form-field appearance="outline">
+        <mat-label app-translate [app-translate-inner]="true">
+            Zone
+        </mat-label>
+        
+        <mat-select name="zoneId" formControlName="zoneId" placeholder="zoneId" required>
+            <mat-option *ngFor="let zone of zones" [value]="zone.zoneId" [disabled]="zone.selected">
+                {{ zone.description }}
+            </mat-option>
+        </mat-select>
+
+        <mat-error align="start" *ngIf="errors.zoneId" class="form__error">
+            {{ errors.zoneId }}
+        </mat-error>
+    </mat-form-field>
+
+    <button type="submit" mat-raised-button color="primary" app-translate [app-translate-inner]="true">
+  	  {{ mode == 'add' ? 'link' : '' }}
+  	  {{ mode == 'edit' ? 'update link' : '' }}
+    </button>
+</form>
