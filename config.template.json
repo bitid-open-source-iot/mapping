@@ -1,3 +1,22 @@
 {
-    "port": 7000
+    "port": 7000,
+    "logger": {
+        "appenders": {
+            "mapping": {
+                "type":         "file",
+                "backups":      10,
+                "filename":     "./logs/mapping.log",
+                "absolute":     true,
+                "maxLogSize":   102400
+            }
+        },
+        "categories": {
+            "default": {
+                "appenders": [
+                    "mapping"
+                ],
+                "level": "error"
+            }
+        }
+    }
 }
