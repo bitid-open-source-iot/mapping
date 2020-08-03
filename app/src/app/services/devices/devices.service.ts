@@ -1,7 +1,8 @@
-import { Subject } from 'rxjs';
+import { Device } from 'src/app/interfaces/device';
+import { MapIcon } from 'src/app/icon';
 import { Injectable } from '@angular/core';
-import { ApiService } from './../../services/api/api.service';
-import { environment } from './../../../environments/environment';
+import { ApiService } from '../api/api.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
 	providedIn: 'root'
@@ -9,20 +10,55 @@ import { environment } from './../../../environments/environment';
 
 export class DevicesService {
 
-	public changes: Subject<DeviceChanges> = new Subject();
+	public data: Device[] = [];
 
 	constructor(private api: ApiService) {};
 
 	public async add(params) {
-		return await this.api.post(environment.telemetry, '/telemetry/devices/add', params);
+		const response = await this.api.post(environment.telemetry, '/telemetry/devices/add', params);
+
+		if (response.ok) {
+		};
+
+		return response;
 	};
 
 	public async get(params) {
-		return await this.api.post(environment.telemetry, '/telemetry/devices/get', params);
+		const response = await this.api.post(environment.telemetry, '/telemetry/devices/get', params);
+
+		if (response.ok) {};
+
+		return response;
 	};
 
 	public async list(params) {
-		return  await this.api.post(environment.telemetry, '/telemetry/devices/list', params);
+		const response = await this.api.post(environment.telemetry, '/telemetry/devices/list', params);
+
+		if (response.ok) {
+			this.data = response.result;
+			this.data.map(device => {
+				if (typeof(device.icon) != 'undefined' && device.icon !== null && typeof(device.location) != 'undefined' && device.location !== null) {
+					device.location.icon = new MapIcon(device.icon);
+				};
+				if (Array.isArray(device.inputs)) {
+					device.inputs.map(input => {
+						if (input.type == 'analog') { 
+							input.value = parseFloat(input.value).toFixed(2);
+						} else if (input.type == 'digital') {
+							if (input.value == 0) { 
+								input.value = input.digital.low;
+							} else if (input.value == 1) {
+								input.value = input.digital.high;
+							} else {
+								input.value = '-';
+							};
+						};
+					});
+				};
+			});
+		};
+
+		return response;
 	};
 
 	public async share(params) {
@@ -37,19 +73,8 @@ export class DevicesService {
 		return await this.api.post(environment.telemetry, '/telemetry/devices/delete', params);
 	};
 
-	public async quickadd(params) {
-		return await this.api.post(environment.telemetry, '/telemetry/devices/quickadd', params);
-	};
-
 	public async historical(params) {
-		const response = await this.api.post(environment.telemetry, '/telemetry/devices/historical', params);
-
-		this.changes.next({
-			'type': 'history',
-			'data': response
-		});
-
-		return response;
+		return await this.api.post(environment.telemetry, '/telemetry/devices/historical', params);
 	};
 
 	public async unsubscribe(params) {
@@ -59,9 +84,4 @@ export class DevicesService {
 	public async updatesubscriber(params) {
 		return await this.api.post(environment.telemetry, '/telemetry/devices/updatesubscriber', params);
 	};
-}
-
-interface DeviceChanges {
-	'type': string;
-	'data': any;
 }

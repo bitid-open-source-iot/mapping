@@ -1,0 +1,47 @@
+<mat-toolbar color="primary">
+    <div class="spacer">
+        {{ mode == 'add' ? ('add group' | translate : language | async) : '' }}
+        {{ mode == 'update' ? ('edit group' | translate : language | async) : '' }}
+    </div>
+    
+    <button type="button" mat-icon-button (click)="close()">
+        <mat-icon>close</mat-icon>
+    </button>
+</mat-toolbar>
+
+<form [formGroup]="form" (ngSubmit)="!form.invalid && submit()">
+    <mat-form-field appearance="outline">
+        <mat-label text-capitalize>
+            {{ 'description' | translate : language | async }}
+        </mat-label>
+        
+        <input matInput type="text" name="description" [placeholder]="'description' | translate : language | async" formControlName="description" required>
+    
+        <mat-error *ngIf="errors.description">
+            {{ errors.description | translate : language | async }}
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label text-capitalize>
+            {{ 'sharing rules' | translate : language | async }}
+        </mat-label>
+        
+        <mat-select name="organizationOnly" [placeholder]="'sharing rules' | translate : language | async" formControlName="organizationOnly" required text-capitalize>
+            <mat-option [value]="0" text-capitalize>
+                {{ 'anyone can share' | translate : language | async }}
+            </mat-option>
+            <mat-option [value]="1" text-capitalize>
+                {{ 'in organization only' | translate : language | async }}
+            </mat-option>
+        </mat-select>
+    
+        <mat-error *ngIf="errors.organizationOnly">
+            {{ errors.organizationOnly | translate : language | async }}
+        </mat-error>
+    </mat-form-field>
+
+    <button type="submit" mat-flat-button color="primary">
+        {{ 'submit' | translate : language | async }}
+    </button>
+</form>

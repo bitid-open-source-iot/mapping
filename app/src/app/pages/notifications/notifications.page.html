@@ -1,0 +1,34 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button class="menu-toggle" (click)="menu.toggle()" *ngIf="!menu.opened">
+        <mat-icon>menu</mat-icon>
+    </button>
+
+    <div class="spacer page-title">
+        notifications
+    </div>
+
+    <search placeholder="filter notifications"></search>
+
+    <button mat-icon-button (click)="OpenFilter()">
+        <mat-icon>filter_list</mat-icon>
+    </button>
+</mat-toolbar>
+
+<mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+
+<div class="notifications-container">
+    <div class="notification" *ngFor="let notification of notifications | filterBy : 'title' : filter">
+        <div class="details">
+            <h1>
+                {{ notification.title }}
+            </h1>
+            <p>
+                {{ notification.message }}
+            </p>
+        </div>
+
+        <span>
+            {{ notification.date | date : 'yyyy/MM/dd HH:mm' }}
+        </span>
+    </div>
+</div>

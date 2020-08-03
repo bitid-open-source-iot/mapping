@@ -1,0 +1,43 @@
+<mat-toolbar>
+    <button mat-icon-button color="primary" routerLink="/signin">
+        <mat-icon>
+            arrow_back
+        </mat-icon>
+    </button>
+
+    <div class="title spacer">
+        verify account
+    </div>
+</mat-toolbar>
+
+<mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+
+<form [formGroup]="form" (ngSubmit)="!form.invalid && submit()">
+    <mat-form-field appearance="outline">
+        <mat-label>
+            Email
+        </mat-label>
+        
+        <input matInput type="email" name="email" placeholder="email" formControlName="email" required>
+
+        <mat-error *ngIf="errors.email">
+            {{ errors.email }}
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>
+            Verification Code
+        </mat-label>
+        
+        <input matInput min="100000" max="999999" step="1" type="number" name="code" placeholder="code" formControlName="code" required>
+
+        <mat-error *ngIf="errors.code">
+            {{ errors.code }}
+        </mat-error>
+    </mat-form-field>
+
+    <button type="submit" mat-flat-button color="primary">
+        submit
+    </button>
+</form>

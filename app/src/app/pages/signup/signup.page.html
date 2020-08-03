@@ -1,0 +1,59 @@
+<mat-toolbar>
+    <button mat-icon-button color="primary" routerLink="/signin">
+        <mat-icon>
+            arrow_back
+        </mat-icon>
+    </button>
+
+    <div class="title spacer">
+        sign up
+    </div>
+</mat-toolbar>
+
+<mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+
+<form [formGroup]="form" (ngSubmit)="!form.invalid && (form.value.confirm == form.value.password) && submit()">
+    <mat-form-field appearance="outline">
+        <mat-label>
+            Email
+        </mat-label>
+        
+        <input matInput type="email" name="email" placeholder="email" formControlName="email" required>
+
+        <mat-error *ngIf="errors.email">
+            {{ errors.email }}
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>
+            Password
+        </mat-label>
+        
+        <input matInput type="password" name="password" placeholder="password" formControlName="password" required>
+
+        <mat-error *ngIf="errors.password">
+            {{ errors.password }}
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>
+            Confirm Password
+        </mat-label>
+        
+        <input matInput type="password" name="confirm" placeholder="confirm password" formControlName="confirm" required>
+
+        <mat-error *ngIf="errors.confirm">
+            {{ errors.confirm }}
+        </mat-error>
+    </mat-form-field>
+
+    <button type="submit" mat-flat-button color="primary">
+        submit
+    </button>
+
+    <button mat-stroked-button color="primary" routerLink="/verify-account">
+        verify account
+    </button>
+</form>

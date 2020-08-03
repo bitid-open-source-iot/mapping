@@ -1,0 +1,53 @@
+#video,
+#container {
+    top:                0px;
+    left:               0px;
+    z-index:            0;
+    display:            flex;
+    position:           fixed;
+    align-items:        center;
+    justify-content:    center;
+    background-color:   #000000;
+    .barcode-box {
+        top:                calc(50vh - 100px);
+        left:               calc(50vw - 200px);
+        width:              400px;
+        height:             200px;
+        border:             4px solid rgba(255, 255, 255, 0.5);
+        z-index:            10;
+        display:            flex;
+        position:           absolute;
+        align-items:        center;
+        border-radius:      10px;
+        flex-direction:     row;
+        justify-content:    space-evenly;
+        .bar {
+            flex:               0 4px;
+            height:             calc(100% - 20px);
+            margin:             10px;
+            opacity:            0.5;
+            border-radius:      10px;
+            background-color:   #FFFFFF;
+        }
+        .bar:first-child {
+            margin-left: 20px;
+        }
+        .bar:last-child {
+            margin-right: 20px;
+        }
+    }
+}
+button {
+    left:   calc(50vw - 28px);
+    bottom:     15px;
+    z-index:    15;
+    position:   fixed;
+}
+@media screen and (max-width: 420px) {
+    #container .barcode-box {
+        top:    calc(50vh - 22.5vw) !important;
+        left:   calc(50vw - 45vw) !important;
+        width:  90vw !important;
+        height: 45vw !important;
+    }
+}

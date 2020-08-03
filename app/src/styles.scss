@@ -1,82 +1,303 @@
-@import '~ngx-toastr/toastr';
-.toast-container {
-    position: absolute;
+@import '~@angular/material/theming';
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+
+$mat-myapp-primary: (
+    50 : #000,
+    100 : #000,
+    200 : #000,
+    300 : #000,
+    400 : #000,
+    500 : #000,
+    600 : #000,
+    700 : #000,
+    800 : #000,
+    900 : #000,
+    A100 : #000,
+    A200 : #000,
+    A400 : #000,
+    A700 : #000,
+    contrast: (
+        50 : #FFF,
+        100 : #FFF,
+        200 : #FFF,
+        300 : #FFF,
+        400 : #FFF,
+        500 : #FFF,
+        600 : #FFF,
+        700 : #FFF,
+        800 : #FFF,
+        900 : #FFF,
+        A100 : #FFF,
+        A200 : #FFF,
+        A400 : #FFF,
+        A700 : #FFF,
+    )
+);
+
+$mat-myapp-accent: (
+    50 : #E8F5E9,
+    100 : #C8E6C9,
+    200 : #A5D6A7,
+    300 : #81C784,
+    400 : #66BB6A,
+    500 : #4CAF50,
+    600 : #43A047,
+    700 : #388E3C,
+    800 : #2E7D32,
+    900 : #1B5E20,
+    A100 : #1B5E20,
+    A200 : #1B5E20,
+    A400 : #1B5E20,
+    A700 : #1B5E20,
+    contrast: (
+        50 : #FFFFFF,
+        100 : #FFFFFF,
+        200 : #FFFFFF,
+        300 : #FFFFFF,
+        400 : #FFFFFF,
+        500 : #FFFFFF,
+        600 : #FFFFFF,
+        700 : #FFFFFF,
+        800 : #FFFFFF,
+        900 : #FFFFFF,
+        A100 : #FFFFFF,
+        A200 : #FFFFFF,
+        A400 : #FFFFFF,
+        A700 : #FFFFFF
+    )
+);
+
+$primary: mat-palette($mat-myapp-primary);
+$accent: mat-palette($mat-myapp-accent);
+
+$theme: mat-light-theme($primary, $accent);
+
+@include angular-material-theme($theme);
+
+html, body {
+    height: 100%;
 }
-html, body * {
-    font-family:            Sans-serif;
+body {
+    margin:         0px;
+    font-family:    Roboto, "Helvetica Neue", sans-serif;
+}
+input {
+    -webkit-user-select: all !important;
+}
+* {
     user-select:            none;
     -ms-user-select:        none;
     -moz-user-select:       none;
     -webkit-user-select:    none;
 }
-body {
-    margin: 0px !important;
+form {
+    display:        flex;
+    flex-direction: column;
+    mat-form-field {
+        flex: 1 auto;
+    }
 }
-[spacer] {
+mat-toolbar {
+    height: 56px !important;
+}
+.spacer {
     flex: 1 auto;
 }
-.page-label {
-	margin-left: 15px;
+.page-title {
+    font-size:      16px;
+    font-weight:    400;
+    text-transform: uppercase;
 }
-.mat-dialog-container {
+.page-body {
+    overflow-y: auto;
+    max-height: calc(100% - 56px);
+}
+.splash-screen {
+    top:                0px;
+    left:               0px;
+    right:              0px;
+    bottom:             0px;
+    display:            flex;
+    z-index:            10000;
+    position:           fixed;
+    align-items:        center;
+    justify-content:    center;
+    background-color:   #FFFFFF;
+}
+.menu-toggle {
+    margin-right: 15px !important;
+}
+.mat-snack-bar-container {
+    text-align:     center !important;
+    border-radius:  25px !important;
+    span {
+        justify-content: center !important;
+    }
+}
+table {
+    width: 100%;
+}
+mat-header-row {
+    height:         30px !important;
+    min-height:     30px !important;
+    text-transform: uppercase; 
+}
+.page-container {
+    height:     calc(100vh - 56px);
+    overflow-y: auto;
+}
+[text-uppercase] {
+    text-transform: uppercase !important;
+}
+[text-capitalize] {
+    text-transform: capitalize !important;
+}
+mat-bottom-sheet-container {
     padding: 0px !important;
 }
-.full-screen-dialog {
+simple-snack-bar {
+    justify-content: center !important;
+}
+.mat-tab-group .mat-tab-header .mat-tab-label {
+    text-transform: uppercase !important;
+}
+.toast-error {
+    text-transform:     uppercase;
+    background-color:   #F44336 !important;
+}
+.toast-success {
+    text-transform:     uppercase;
+    background-color:   #4CAF50 !important;
+}
+.mat-progress-bar-fill::after {
+    background-color: rgba(255, 255, 255, 0.5) !important;
+}
+.mat-progress-bar-buffer {
+    background: #3860AD !important;
+}
+.mat-progress-bar {
+    margin-top: -4px !important;
+}
+.mat-spinner-negative.mat-progress-spinner circle, .mat-spinner-negative.mat-spinner circle {
+    stroke: #FFFFFF;
+}
+.device-modal {
+    bottom:     0px !important;
+    position:   absolute !important;
+    max-width:  100% !important;
+    .mat-dialog-container {
+        width:                      550px;
+        padding:                    0px !important;
+        border-radius:              15px;
+        border-bottom-left-radius:  0px;
+        border-bottom-right-radius: 0px;
+    }
+}
+.expanded {
     top:            0px !important;
     left:           0px !important;
+    width:          100% !important;
     right:          0px !important;
     bottom:         0px !important;
     position:       fixed !important;
-    max-width:      100% !important;
     border-radius:  0px !important;
-    mat-toolbar {
-      color: #4CAF50;
-    }
-    .full-screen-dialog-body {
-        overflow-y:     auto;
-        max-height:     calc(100vh - 64px);
-        border-radius:  0px !important;
-    }
-}
-.mat-button-toggle-label-content {
-	padding: 		0px 8px !important;
-	line-height: 	40px !important;
-}
-
-.mapping-progress-bar {
-    height:     2px !important;
-    margin-top: -2px !important;
-}
-.share-dialog,
-.search-dialog,
-.remove-dialog,
-.history-dialog,
-.subscribers-dialog,
-.unsubscribe-dialog,
-.reset-password-dialog {
-    width: 500px !important;
-    mat-toolbar {
-      color: #4CAF50;
-    }
 }
 @media screen and (max-width: 600px) {
-    .share-dialog,
-    .search-dialog,
-    .remove-dialog,
-    .history-dialog,
-    .subscribers-dialog,
-    .unsubscribe-dialog,
-    .reset-password-dialog {
-        top:            0px !important;
-        left:           0px !important;
-        width:          100% !important;
-        right:          0px !important;
-        bottom:         0px !important;
-        position:       fixed !important;
-        max-width:      100% !important;
-        border-radius:  0px !important;
+    .device-modal {
+        left:   0px;
+        right:  0px;
+        .mat-dialog-container {
+            width: 100%;
+        }
+    }   
+}
+.signal .low,
+.signal .high,
+.signal .medium,
+.signal .medium-low,
+.signal .medium-high {
+    fill: #E0E0E0 !important;
+}
+.low .signal .low {
+    fill: #F44336 !important;
+}
+.medium-low {
+    .signal .low,
+    .signal .medium-low {
+        fill: #FF9800 !important;
     }
-    .full-screen-dialog .full-screen-dialog-body {
-        max-height: calc(100vh - 56px);
+}
+.medium {
+    .signal .low,
+    .signal .medium,
+    .signal .medium-low {
+        fill: #FFC107 !important;
     }
+}
+.medium-high {
+    .signal .low,
+    .signal .medium,
+    .signal .medium-low,
+    .signal .medium-high {
+        fill: #2196F3 !important;
+    }
+}
+.high {
+    .signal .low,
+    .signal .high,
+    .signal .medium,
+    .signal .medium-low,
+    .signal .medium-high {
+        fill: #4CAF50 !important;
+    }
+}
+
+.battery .low,
+.battery .high,
+.battery .medium-low,
+.battery .medium-high {
+    fill: #E0E0E0 !important;
+}
+.low {
+    .battery .low {
+        fill: #F44336 !important;
+    }
+}
+.medium-low {
+    .battery .low,
+    .battery .medium-low {
+        fill: #FF9800 !important;
+    }
+}
+.medium-high {
+    .battery .low,
+    .battery .medium-low,
+    .battery .medium-high {
+        fill: #2196F3 !important;
+    }
+}
+.high {
+    .battery .low,
+    .battery .high,
+    .battery .medium-low,
+    .battery .medium-high {
+        fill: #4CAF50 !important;
+    }
+}
+
+.gm-bundled-control-on-bottom {
+    right:  50px !important;
+    bottom: 110px !important;
+    button {
+        width:  48px !important;
+        height: 48px !important;
+    }
+}
+.gm-bundled-control-on-bottom > div > div {
+    width:  48px !important;
+    height: 95px !important;
+}
+.gm-bundled-control-on-bottom > div > div > div {
+    width:  48px !important;
+    margin: 0px !important;
 }

@@ -1,0 +1,53 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button class="menu-toggle" (click)="menu.toggle()" *ngIf="!menu.opened">
+        <mat-icon>
+            menu
+        </mat-icon>
+    </button>
+
+    <label class="page-title spacer">
+        Map
+    </label>
+
+    <search placeholder="search zones & devices"></search>
+
+    <button mat-icon-button (click)="ToggleEditor()">
+        <mat-icon>
+            edit
+        </mat-icon>
+    </button>
+</mat-toolbar>
+
+<mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+
+<mat-button-toggle-group [value]="mode" [vertical]="true" (change)="ToggleDrawingMode($event)" draw-controls *ngIf="editing">
+    <mat-button-toggle value="hand" matTooltip="Move Mode" matTooltipPosition="before">
+        <mat-icon svgIcon="drag"></mat-icon>
+    </mat-button-toggle>
+
+    <mat-button-toggle value="circle" matTooltip="Draw Circle" matTooltipPosition="before">
+        <mat-icon svgIcon="draw-circle"></mat-icon>
+    </mat-button-toggle>
+    
+    <mat-button-toggle value="polygon" matTooltip="Draw Polygon" matTooltipPosition="before">
+        <mat-icon svgIcon="draw-poly"></mat-icon>
+    </mat-button-toggle>
+    
+    <mat-button-toggle value="rectangle" matTooltip="Draw Rectangle" matTooltipPosition="before">
+        <mat-icon svgIcon="draw-rect"></mat-icon>
+    </mat-button-toggle>
+</mat-button-toggle-group>
+
+<agm-map [fitBounds]="true">
+    <agm-marker-cluster imagePath="https://raw.githubusercontent.com/googlemaps/v3-utility-library/master/markerclustererplus/images/m">
+        <agm-marker *ngFor="let device of devices.data" [iconUrl]="device.location.icon.url" [latitude]="device.location.latitude" [longitude]="device.location.longitude" [agmFitBounds]="true" (markerClick)="ViewDevice(device)" [markerClickable]="true"></agm-marker>
+    </agm-marker-cluster>
+
+    <agm-polygon *ngFor="let zone of zones.data" [attr.id]="zone.zoneId" [paths]="zone.points" [visible]="zone.visible" [editable]="editing" [clickable]="true" (polyClick)="ViewZone(zone)" (polyPathsChange)="ZonePathsChange($event, zone)"></agm-polygon>
+
+    <!-- <agm-polyline strokeColor="#3F51B5" strokeWeight="4" [visible]="HistoryLineEnabled">
+        <agm-polyline-point *ngFor="let point of historical" [latitude]="point.location.latitude" [longitude]="point.location.longitude"></agm-polyline-point>
+    </agm-polyline>
+
+    <agm-marker [visible]="TrackerMarker.visible" [latitude]="TrackerMarker.latitude" [longitude]="TrackerMarker.longitude" fillColor="#3F51B5" strokeColor="#3F51B5"></agm-marker> -->
+</agm-map>

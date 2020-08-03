@@ -1,0 +1,36 @@
+img {
+    width:      100px;
+    margin:     auto;
+    display:    block;
+    margin-top: 50px;
+}
+h1 {
+    margin-top: 10px;
+    text-align: center;
+}
+form {
+    width:      400px;
+    margin:     auto;
+    padding:    0px 10px;
+    position:   relative;
+    button {
+        flex:               1 auto;
+        height:             50px;
+        display:            flex;
+        font-size:          16px;
+        text-align:         center;
+        align-items:        center;
+        font-weight:        400;
+        margin-bottom:      15px;
+        text-transform:     uppercase;
+        justify-content:    center;
+    }
+}
+.mat-progress-spinner circle, .mat-spinner circle {
+    stroke: #FFFFFF;
+}
+@media screen and (max-width: 420px) {
+    form {
+        width: calc(100% - 20px);
+    }
+}

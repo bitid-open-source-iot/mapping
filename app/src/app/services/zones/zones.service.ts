@@ -1,7 +1,6 @@
-import { Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { ApiService } from './../../services/api/api.service';
-import { environment } from './../../../environments/environment';
+import { ApiService } from '../api/api.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
 	providedIn: 'root'
@@ -9,24 +8,12 @@ import { environment } from './../../../environments/environment';
 
 export class ZonesService {
 
-	public changes: Subject<ZoneChanges> = new Subject();
+	public data: any[] = [];
 
 	constructor(private api: ApiService) {};
 
 	public async add(params) {
-		const response = await this.api.post(environment.telemetry, '/telemetry/zones/add', params);
-
-		if (response.ok) {
-			let zone: Zone = params;
-			zone.zoneId = response.result.zoneId;
-
-			this.changes.next({
-				'type': 'add',
-				'data': zone
-			});
-		};
-
-		return response;
+		return await this.api.post(environment.telemetry, '/telemetry/zones/add', params);
 	};
 
 	public async get(params) {
@@ -34,7 +21,13 @@ export class ZonesService {
 	};
 
 	public async list(params) {
-		return await this.api.post(environment.telemetry, '/telemetry/zones/list', params);
+		const response = await this.api.post(environment.telemetry, '/telemetry/zones/list', params);
+
+		if (response.ok) {
+			this.data = response.result;
+		};
+
+		return response;
 	};
 
 	public async share(params) {
@@ -46,16 +39,7 @@ export class ZonesService {
 	};
 
 	public async delete(params) {
-		const response = await this.api.post(environment.telemetry, '/telemetry/zones/delete', params);
-
-		if (response.ok) {
-			this.changes.next({
-				'type': 'delete',
-				'data': params
-			});
-		};
-
-		return response;
+		return await this.api.post(environment.telemetry, '/telemetry/zones/delete', params);
 	};
 
 	public async unsubscribe(params) {
@@ -65,16 +49,4 @@ export class ZonesService {
 	public async updatesubscriber(params) {
 		return await this.api.post(environment.telemetry, '/telemetry/zones/updatesubscriber', params);
 	};
-}
-
-export interface Zone {
-	'role': 		number;
-	'zoneId': 		string;
-	'points': 		any[];
-	'description': 	any;
-}
-
-interface ZoneChanges {
-	'type': string;
-	'data': any;
 }

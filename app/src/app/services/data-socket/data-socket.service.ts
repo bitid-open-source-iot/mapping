@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { environment } from './../../../environments/environment';
-import { LocalstorageService } from './../localstorage/localstorage.service';
+import { environment } from 'src/environments/environment';
+import { LocalstorageService } from '../localstorage/localstorage.service';
 import { Subject, BehaviorSubject } from 'rxjs';
 
 @Injectable({
@@ -9,20 +9,17 @@ import { Subject, BehaviorSubject } from 'rxjs';
 
 export class DataSocketService {
 
-	private url: 			string;
-	public 	data: 			any		= new Subject();
-	public 	error: 			any 	= new Subject();
-	public 	status: 		any		= new BehaviorSubject('disconnected');
-	private socket: 		any;
-	private autoreconnect: 	boolean;
+	public 	data:	any	= new Subject();
+	public 	error: 	any	= new Subject();
+	public 	status: any	= new BehaviorSubject('disconnected');
+	private socket: any;
 
 	constructor(private localstorage: LocalstorageService) {};
 
-	public connect(url, autoreconnect?) {
+	public connect() {
 		return new Promise((resolve, reject) => {
-			this.url			= url + '?email=' + this.localstorage.get('email') + '&token=' + this.localstorage.get('token') + '&appId=' + environment.appId;
-			this.socket 		= new WebSocket(this.url);
-			this.autoreconnect 	= autoreconnect;
+			let url			= environment.socket + '?email=' + this.localstorage.get('email') + '&token=' + this.localstorage.get('token') + '&appId=' + environment.appId;
+			this.socket 		= new WebSocket(url);
 
 			this.socket.onopen 	= (event) => {
 				console.log('connected');
@@ -31,15 +28,13 @@ export class DataSocketService {
 			this.socket.onclose = (event) => {
 				console.log('disconnected');
 				this.status.next('disconnected');
-				if (this.autoreconnect) {
-					if (event.code != "4001") {
-						this.reconnect();
-					} else {
-						this.error.next({
-							'code': 	401,
-							'message': 	'Invalid Credentials!'
-						});
-					};
+				if (event.code != "4001") {
+					this.reconnect();
+				} else {
+					this.error.next({
+						'code': 	401,
+						'message': 	'Invalid Credentials!'
+					});
 				};
 			};
 			this.socket.onerror = (error) => {
@@ -54,14 +49,14 @@ export class DataSocketService {
 
 	public reconnect() {
 		return new Promise((resolve, reject) => {
-			console.log('reconnecting');
-			this.disconnect()
-			.then(res => this.connect(this.url))
-			.then(res => {
-				resolve();
-			}, err => {
-				reject();
-			});
+			console.log('reconnecting in a few seconds');
+			setTimeout(() => {
+				this.disconnect().then(res => this.connect()).then(res => {
+					resolve();
+				}, err => {
+					reject();
+				});
+			}, 5000);
 		});
 	};
 

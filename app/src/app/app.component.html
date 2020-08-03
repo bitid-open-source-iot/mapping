@@ -1,62 +1,34 @@
-<mat-sidenav-container [hasBackdrop]="mode == 'large' ? true : false">
-    <mat-sidenav #sidemenu mode="side" [class.small]="mode == 'small'" [disableClose]="true">
-        <mat-toolbar>
-            <mat-toolbar-row>
-                <img class="logo" src="./assets/icon-512.png" (click)="menu.toggle()" matTooltip="Toggle Menu" matTooltipPosition="after">
+<mat-sidenav-container>
+    <mat-sidenav mode="side">
+        <mat-toolbar color="primary">
+            <img class="logo" src="./assets/icons/icon-512x512.png" (click)="menu.toggle()">
 
-                <label *ngIf="mode == 'large'" bit-branding bit-color>
-                    Mapping
-                </label>
+            <label class="spacer">
+                Mapping
+            </label>
 
-                <div spacer *ngIf="mode == 'large'"></div>
-
-                <button mat-icon-button (click)="menu.toggle()" *ngIf="mode == 'large'" matTooltip="Toggle Menu" matTooltipPosition="after" bit-branding bit-color>
-                    <mat-icon>
-                        close
-                    </mat-icon>
-                </button>
-            </mat-toolbar-row>
+            <button mat-icon-button (click)="menu.close()">
+                <mat-icon>
+                    close
+                </mat-icon>
+            </button>
         </mat-toolbar>
 
         <mat-list>
-            <mat-list-item routerLinkActive="active current" routerLink="home" (click)="menu.changeRoute()" matTooltip="Home" matTooltipPosition="after" bit-branding bit-color-hover bit-color-active bit-background-class-active>
-                <mat-icon>
-                    home
-                </mat-icon>
-
-                <span *ngIf="mode == 'large'" app-translate [app-translate-inner]="true">
-                    Home
-                </span>
-            </mat-list-item>
-            
-            <mat-list-item routerLinkActive="active current" routerLink="map" (click)="menu.changeRoute()" matTooltip="Map" matTooltipPosition="after" bit-branding bit-color-hover bit-color-active bit-background-class-active>
+            <mat-list-item routerLinkActive="active current" routerLink="/map">
                 <mat-icon>
                     map
                 </mat-icon>
-
-                <span *ngIf="mode == 'large'" app-translate [app-translate-inner]="true">
-                    Map
-                </span>
-            </mat-list-item>
-            
-            <mat-list-item routerLinkActive="active current" routerLink="notifications" (click)="menu.changeRoute()" matTooltip="Notifications" matTooltipPosition="after" bit-branding bit-color-hover bit-color-active bit-background-class-active>
-                <mat-icon>
-                    notifications
-                </mat-icon>
-
-                <span *ngIf="mode == 'large'" app-translate [app-translate-inner]="true">
-                    Notifications
-                </span>
+    
+                Map
             </mat-list-item>
 
-            <mat-list-item (click)="logout()" matTooltip="Sign Out" matTooltipPosition="after" bit-branding bit-color-hover bit-color-active bit-background-class-active>
+            <mat-list-item (click)="logout()">
                 <mat-icon>
                     exit_to_app
                 </mat-icon>
                 
-                <span *ngIf="mode == 'large'" app-translate [app-translate-inner]="true">
-                    Sign Out
-                </span>
+                sign out
             </mat-list-item>
         </mat-list>
     </mat-sidenav>
@@ -65,3 +37,5 @@
         <router-outlet></router-outlet>
     </mat-sidenav-content>
 </mat-sidenav-container>
+
+<app-splashscreen></app-splashscreen>

@@ -1,0 +1,43 @@
+<div class="divice-modal-container">
+    <button mat-icon-button (click)="toggle()">
+        <mat-icon>
+            {{ expanded ? 'expand_more' : 'expand_less' }}
+        </mat-icon>
+    </button>
+
+    <label>
+        {{ device.description }}
+    </label>
+
+    <div class="status">
+        <battery [level]="device.battery.value" [matTooltip]="(device.battery.value | number : '0.0-0') + '%'" matTooltipPosition="below"></battery>
+        
+        <signal [strength]="device.signal.value" [matTooltip]="(device.signal.value | number : '0.0-0') + '%'" matTooltipPosition="below"></signal>
+    </div>
+
+    <p>
+        {{ device.lastcomms }}
+    </p>
+
+    <div class="preview" *ngIf="!expanded">
+        <div class="item" *ngFor="let item of priority">
+            <h1>
+                {{ item.value }}{{ item.type == 'analog' ? item.analog.units : '' }}
+            </h1>
+            <h3>
+                {{ item.description }}
+            </h3>
+        </div>
+    </div>
+
+    <div class="inputs" *ngIf="expanded">
+        <div class="item" *ngFor="let item of device.inputs">
+            <h1>
+                {{ item.value }}{{ item.type == 'analog' ? item.analog.units : '' }}
+            </h1>
+            <h3>
+                {{ item.description }}
+            </h3>
+        </div>
+    </div>
+</div>

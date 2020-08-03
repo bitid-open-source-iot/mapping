@@ -1,35 +1,34 @@
-<mat-toolbar>
-    <mat-toolbar-row>
-        <button mat-icon-button (click)="close()" bit-branding bit-color>
-            <mat-icon>
-                arrow_back
-            </mat-icon>
-        </button>
+<mat-toolbar color="primary">
+    <div class="spacer">
+        unsubscribe
+    </div>
 
-        <label class="page-label" bit-branding bit-color>
-            Unsubscribe {{ description }}
-        </label>
-    </mat-toolbar-row>
+    <button type="button" mat-icon-button (click)="close()">
+        <mat-icon>close</mat-icon>
+    </button>
 </mat-toolbar>
 
-<form [formGroup]="form" (ngSubmit)="!form.invalid && form.value.confirm && submit()">
-     <mat-form-field appearance="outline">
+<form [formGroup]="form" (ngSubmit)="!form.invalid && submit()">
+    <mat-form-field appearance="outline">
         <mat-label>
-            Confirm
+            Confirm Unsubscribe
         </mat-label>
         
-        <mat-select name="confirm" formControlName="confirm" placeholder="confirm" required>
-            <mat-option *ngFor="let option of options" [value]="option.value">
-                {{ option.description }}
+        <mat-select name="confirm" placeholder="confirm" formControlName="confirm" required>
+            <mat-option [value]="true">
+                Unsubscribe Now
+            </mat-option>
+            <mat-option [value]="false">
+                Don't Unsubscribe
             </mat-option>
         </mat-select>
 
-        <mat-error align="start" *ngIf="errors.confirm" class="form__error">
+        <mat-error *ngIf="errors.confirm">
             {{ errors.confirm }}
         </mat-error>
     </mat-form-field>
 
-    <button type="submit" mat-raised-button color="warn">
-        unsubscribe
+    <button type="submit" mat-flat-button color="primary" [disabled]="!form.value.confirm">
+        submit
     </button>
 </form>

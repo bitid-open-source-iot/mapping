@@ -1,8 +1,7 @@
 import { Router } from '@angular/router';
-import { Location } from '@angular/common';
+import { environment } from 'src/environments/environment';
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
-import { LocalstorageService }  from '../../services/localstorage/localstorage.service';
+import { LocalstorageService }  from '../localstorage/localstorage.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable()
@@ -14,12 +13,12 @@ export class ApiService {
     private email: string;
     private token: string;
 
-    public async put(url, endpoint, payload, settings?) {
+    public async put(url, endpoint, payload) {
         this.email = this.localstorage.get('email');
 
         if (!this.email || typeof(this.email) == "undefined") {
             this.localstorage.clear();
-            this.router.navigate(['/login'])
+            this.router.navigate(['/signin'])
         };
         
         const options = {
@@ -52,7 +51,7 @@ export class ApiService {
 
         if (typeof(this.token) == "undefined" || (typeof(this.email) == "undefined")) {
             this.localstorage.clear();
-            this.router.navigate(['/login'])
+            this.router.navigate(['/signin'])
         };
         
         const options = {
@@ -86,7 +85,7 @@ export class ApiService {
                 error.error = error.error.errors[0];
                 if (error.code == 401) {
                     this.localstorage.clear();
-                    this.router.navigate(['/login']);
+                    this.router.navigate(['/signin']);
                 };
                 return error;
             } else {

@@ -1,55 +1,44 @@
-/* PAGES */
-import { MapComponent } from './pages/map/map.component';
-import { HomeComponent } from './pages/home/home.component';
-import { HelpComponent } from './pages/help/help.component';
-import { LoginComponent } from './pages/login/login.component';
-import { NotFoundComponent } from './pages/not-found/not-found.component';
-import { NotificationsComponent } from './pages/notifications/notifications.component';
-import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.component';
-
-/* MODULES */
+/* --- MODULES --- */
 import { NgModule } from '@angular/core';
+import { AuthManager } from './services/account/account.manager';
 import { Routes, RouterModule } from '@angular/router';
 
-/* SERVICES */
-import { AuthManager } from './services/auth/auth.manager';
-
 const routes: Routes = [
-	{
-		'path': 		'map',
-		'component': 	MapComponent,
-		'canActivate': 	[AuthManager]
-	},
-	{
-		'path': 		'notifications',
-		'component': 	NotificationsComponent,
-		'canActivate': 	[AuthManager]
-	},
-	{
-		'path': 		'help',
-		'component': 	HelpComponent
-	},
-	{
-		'path': 		'home',
-		'component': 	HomeComponent
-	},
-	{
-		'path': 		'login',
-		'component': 	LoginComponent
-	},
-	{
-		'path': 		'privacy-policy',
-		'component': 	PrivacyPolicyComponent
-	},
-	{
-		'path': 		'**',
-		'component': 	NotFoundComponent
-	}
+    {
+        'path':         'map',
+        'canActivate':  [AuthManager],
+        'loadChildren': () => import('./pages/map/map.module').then(m => m.MapModule)
+    },
+    {
+        'path':         'notifications',
+        'canActivate':  [AuthManager],
+        'loadChildren': () => import('./pages/notifications/notifications.module').then(m => m.NotificationsModule)
+    },
+    {
+        'path':         'signin',
+        'loadChildren': () => import('./pages/signin/signin.module').then(m => m.SigninModule)
+    },
+    {
+        'path':         'signup',
+        'loadChildren': () => import('./pages/signup/signup.module').then(m => m.SignupModule)
+    },
+    {
+        'path':         'verify-account',
+        'loadChildren': () => import('./pages/verify-account/verify-account.module').then(m => m.VerifyAccountModule)
+    },
+    {
+        'path':         'forgot-password',
+        'loadChildren': () => import('./pages/forgot-password/forgot-password.module').then(m => m.ForgotPasswordModule)
+    },
+    {
+        'path':         '**',
+        'redirectTo':   'map'
+    }
 ];
 
 @NgModule({
-	imports: [RouterModule.forRoot(routes)],
-	exports: [RouterModule]
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule]
 })
 
 export class AppRoutingModule {}

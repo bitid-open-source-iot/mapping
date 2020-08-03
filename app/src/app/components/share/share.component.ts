@@ -1,48 +1,46 @@
-import { environment } from './../../../environments/environment';
-import { FormErrorService }  from './../../services/form-error/form-error.service';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { environment } from 'src/environments/environment';
+import { MatDialogRef } from '@angular/material/dialog';
+import { FormErrorService } from 'src/app/services/form-error/form-error.service';
+import { OnInit, Component, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Inject, Component, AfterContentInit } from '@angular/core';
 
 @Component({
-    selector:     'share',
-    styleUrls:    ['./share.component.scss'],
-    templateUrl:  './share.component.html'
+    selector:       'app-share',
+    styleUrls:      ['./share.component.scss'],
+    templateUrl:    './share.component.html'
 })
 
-export class ShareComponent implements AfterContentInit {
-    
-    constructor(private dialog: MatDialogRef<ShareComponent>, @Inject(MAT_DIALOG_DATA) private data: ShareParams, private formerror: FormErrorService) {}
-    
-    public form:          FormGroup = new FormGroup({
-        'role':  new FormControl(1, [Validators.required]),
-        'email': new FormControl('', [Validators.required, Validators.email])
+export class ShareComponent implements OnInit, OnDestroy {
+
+    constructor(private dialog: MatDialogRef<ShareComponent>, private formerror: FormErrorService) {};
+
+    public form:    FormGroup   = new FormGroup({
+        'role':     new FormControl(1, [Validators.required]),
+        'email':    new FormControl('', [Validators.required, Validators.email])
     });
-    public roles:         any[]     = environment.roles;
-    public errors:        any       = {
-        'role':  '',
-        'email': ''
+    public roles:   any[]       = environment.roles;
+    public errors:  any         = {
+        'role':     '',
+        'email':    ''
     };
-    public description:   string    = this.data.description;
-    
+    private subscriptions: any  = {};
+
     public close() {
-        this.dialog.close();
+        this.dialog.close(false);
     };
 
     public submit() {
-        this.dialog.close({
-            'role':  this.form.value.role,
-            'email': this.form.value.email
-        });
+        this.dialog.close(this.form.value);
     };
 
-    ngAfterContentInit() {
-        this.form.valueChanges.subscribe((data) => {
+    ngOnInit(): void {
+        this.subscriptions.form = this.form.valueChanges.subscribe(data => {
             this.errors = this.formerror.validateForm(this.form, this.errors, true);
         });
     };
-}
 
-export interface ShareParams {
-    'description': string;
+    ngOnDestroy(): void {
+        this.subscriptions.form.unsubscribe();
+    };
+
 }

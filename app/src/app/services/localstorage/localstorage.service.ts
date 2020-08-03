@@ -15,8 +15,13 @@ export class LocalstorageService {
         window.localStorage.setItem(key, JSON.stringify(value || {}));
     };
 
-    getObject(key) {
-        return JSON.parse(window.localStorage.getItem(key) || '{}');
+    getObject(key, value?: any) {
+        if (typeof(value) != 'undefined' && value !== null) {
+            value = JSON.stringify(value);
+        } else {
+            value = '{}';
+        };
+        return JSON.parse(window.localStorage.getItem(key) || value);
     };
 
     clear() {

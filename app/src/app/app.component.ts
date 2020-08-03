@@ -1,48 +1,68 @@
-import { Router } from '@angular/router';
-import { MatSidenav } from '@angular/material';
-import { AuthService } from './services/auth/auth.service';
+import { MatSidenav } from '@angular/material/sidenav';
 import { MenuService } from './services/menu/menu.service';
-import { environment } from './../environments/environment';
-import { TranslateService } from '@bitid/translate';
+import { DomSanitizer } from '@angular/platform-browser';
+import { SplashScreen } from './splashscreen/splashscreen.component';
+import { AccountService } from './services/account/account.service';
+import { MatIconRegistry } from '@angular/material/icon';
 import { DataSocketService } from './services/data-socket/data-socket.service';
-import { User, AccountService } from '@bitid/account';
-import { OnInit, ViewChild, Component } from '@angular/core';
+import { OnInit, Component, ViewChild } from '@angular/core';
 
 @Component({
-	selector: 		'app-root',
-	styleUrls: 		['./app.component.scss'],
-	templateUrl: 	'./app.component.html'
+    selector:       'app-root',
+    styleUrls:      ['./app.component.scss'],
+    templateUrl:    './app.component.html'
 })
 
 export class AppComponent implements OnInit {
 
-	constructor(public menu: MenuService, private auth: AuthService, private account: AccountService, private translate: TranslateService, private socket: DataSocketService, private router: Router) {
-		this.account.user.subscribe(async (user: User) => {
-			if (typeof(user.language) != "undefined" && user.language != null) {
-				this.translate.language.next(user.language);
-			};
-		});
-		
-		this.account.get();
-	};
+    @ViewChild(MatSidenav, {'static': true})    private sidenav:        MatSidenav;
+    @ViewChild(SplashScreen, {'static': true})  private splashscreen:   SplashScreen;
 
-	public mode: string;
-
-	@ViewChild('sidemenu', {'static': true}) private sidemenu: MatSidenav;
-
-	public logout() {
-    	this.menu.close();
-		this.auth.logout();
-		this.router.navigate(['/login']);
-	};
-
-    ngOnInit() {
-        this.menu.change.subscribe((mode: string) => {
-        	this.mode = mode;
-        });
-        
-        this.menu.init(this.sidemenu);
-
-		this.socket.connect(environment.websocket, true);
+    constructor(public menu: MenuService, private socket: DataSocketService, private account: AccountService, private sanitizer: DomSanitizer, private registry: MatIconRegistry) {
+        this.registry.addSvgIcon('drag', this.sanitizer.bypassSecurityTrustResourceUrl('./assets/drag.svg'));
+        this.registry.addSvgIcon('signal', this.sanitizer.bypassSecurityTrustResourceUrl('./assets/signal.svg'));
+        this.registry.addSvgIcon('battery', this.sanitizer.bypassSecurityTrustResourceUrl('./assets/battery.svg'));
+        this.registry.addSvgIcon('zoom-in', this.sanitizer.bypassSecurityTrustResourceUrl('./assets/zoom-in.svg'));
+        this.registry.addSvgIcon('zoom-out', this.sanitizer.bypassSecurityTrustResourceUrl('./assets/zoom-out.svg'));
+        this.registry.addSvgIcon('draw-rect', this.sanitizer.bypassSecurityTrustResourceUrl('./assets/draw-rect.svg'));
+        this.registry.addSvgIcon('draw-poly', this.sanitizer.bypassSecurityTrustResourceUrl('./assets/draw-poly.svg'));
+        this.registry.addSvgIcon('draw-circle', this.sanitizer.bypassSecurityTrustResourceUrl('./assets/draw-circle.svg'));
     };
+
+    public user:            any = {};
+    public language:        string;
+    public authenticated:   boolean;
+
+    public logout() {
+        this.menu.close();
+        this.account.logout();
+    };
+    
+    private async initialize() {
+        await this.splashscreen.show();
+
+        await this.menu.init(this.sidenav);
+        await this.account.validate();
+
+        await this.splashscreen.hide();
+    };
+
+    ngOnInit() : void {
+        this.account.user.subscribe(async user => {
+            if (user) {
+                this.user = user;
+            };
+        });
+
+        this.account.authenticated.subscribe(async authenticated => {
+            this.authenticated = authenticated;
+            if (authenticated) {
+                await this.account.load();
+                await this.socket.connect();
+            };
+        });
+
+        this.initialize();
+    };
+    
 }

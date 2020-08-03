@@ -1,151 +1,180 @@
-import { environment } from '../../../environments/environment';
-import { LocalstorageService } from './../../services/localstorage/localstorage.service';
-import { OnInit, Inject, ViewChild, Component } from '@angular/core';
-import { MatSort, MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource } from '@angular/material';
+import { environment } from 'src/environments/environment';
+import { ToastService } from 'src/app/services/toast/toast.service';
+import { MatTableDataSource } from '@angular/material/table';
+import { LocalstorageService } from 'src/app/services/localstorage/localstorage.service';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Inject, OnInit, Component, OnDestroy } from '@angular/core';
 
 @Component({
-    selector: 'subscribers',
-    templateUrl: './subscribers.component.html',
-    styleUrls: ['./subscribers.component.scss']
+    selector:       'app-subscribers',
+    styleUrls:      ['./subscribers.component.scss'],
+    templateUrl:    './subscribers.component.html'
 })
 
-export class SubscribersComponent implements OnInit {
-    
-    constructor(private dialog: MatDialogRef<SubscribersComponent>, @Inject(MAT_DIALOG_DATA) private data: SubscribersParams, private localstorage: LocalstorageService) {}
-    
-    public type:                  any    = this.data.type;
-    public role:                  number;
-    public roles:                 any[]  = environment.roles;
-    public email:                 string = '';
-    public loading:               boolean;
-    public service:               any    = this.data.service;
-    public description:           string;
-    public displayedColumns:      any[]  = ['email', 'role', 'options'];
-    public subscribersDataSource: any    = new MatTableDataSource();
-    
-    @ViewChild(MatSort, {
-        'static': false
-    }) sort:  MatSort;
-    
+export class SubscribersComponent implements OnInit, OnDestroy {
+
+    constructor(private toast: ToastService, private dialog: MatDialogRef<SubscribersComponent>, @Inject(MAT_DIALOG_DATA) private config: any, private localstorage: LocalstorageService) {};
+
+    public role:            number      = 0;
+    public email:           string      = this.localstorage.get('email');
+    public roles:           any[]       = environment.roles;
+    public users:           any         = new MatTableDataSource();
+    public loading:         boolean;
+    public columns:         string[]    = ['email', 'role', 'remove'];
+    private subscribers:    any         = {};
+
     public close() {
         this.dialog.close();
     };
-    
-    private async get() {
-        this.loading = true;
 
-        let params: any = {};
-
-        if (this.type == 'zone') {
-            params.filter = [
-                'role',
-                'users',
-                'zoneId',
-                'description'
-            ];
-            params.zoneId = this.data.id;
-        };
-
-        if (this.type == 'device') {
-            params.filter = [
-                'role',
-                'users',
-                'deviceId',
-                'description'
-            ];
-            params.deviceId = this.data.id;
-        };
-
-        const response = await this.service.get(params);
-      
-        this.loading = false;
-
-        if (response.ok) { 
-            if (response.result.role < 4) {
-                this.close();
-            } else {
-                this.role                       = response.result.role;
-                this.description                = response.result.description;
-                this.subscribersDataSource.data = response.result.users;
-            };
-        } else {
-            this.close();
-        };
-    };
-
-    public async remove(params) {
-        this.loading = true;
-
-        if (this.type == 'zone') {
-            params.zoneId = this.data.id;
-        };
-
-        if (this.type == 'device') {
-            params.deviceId = this.data.id;
-        };
-
-        const response = await this.service.unsubscribe(params);
-      
-        this.loading = false;
-
-        if (response.ok) { 
-            for (var i = 0; i < this.subscribersDataSource.data.length; ++i) {
-                if (this.subscribersDataSource.data[i].email == params.email) {
-                    this.subscribersDataSource.data.splice(i, 1);
-                    break;
-                };
-            };
-            this.subscribersDataSource.data = JSON.parse(JSON.stringify(this.subscribersDataSource.data));
-        };
-    };
-
-    public async updatesubscriber(role, email) {
+    public async get() {
         this.loading = true;
 
         let params: any = {
-            'role':  role,
+            'filter': [
+                'role',
+                'users'
+            ]
+        };
+
+        switch(this.config.type) {
+            case('zone'):
+                params.zoneId = this.config.id;
+                break;
+            case('group'):
+                params.groupId = this.config.id;
+                break;
+            case('mimic'):
+                params.mimicId = this.config.id;
+                break;
+            case('people'):
+                params.peopleId = this.config.id;
+                break;
+            case('report'):
+                params.reportId = this.config.id;
+                break;
+            case('system'):
+                params.systemId = this.config.id;
+                break;
+            case('device'):
+                params.deviceId = this.config.id;
+                break;
+        };
+
+        const response = await this.config.service.get(params);
+
+        this.loading = false;
+
+        if (response.ok) {
+            this.role = response.result.role;
+            if (this.role < 4) {
+                this.close();
+                this.toast.error('insufficient role');
+            } else {
+                this.role       = response.result.role;
+                this.users.data = response.result.users;
+            };
+        } else {
+            this.toast.error('issue loading users');
+        };
+    };
+
+    public async unsubscribe(email) {
+        this.loading = true;
+
+        let params: any = {
             'email': email
         };
 
-        if (this.type == 'zone') {
-            params.zoneId = this.data.id;
+        switch(this.config.type) {
+            case('zone'):
+                params.zoneId = this.config.id;
+                break;
+            case('group'):
+                params.groupId = this.config.id;
+                break;
+            case('mimic'):
+                params.mimicId = this.config.id;
+                break;
+            case('people'):
+                params.peopleId = this.config.id;
+                break;
+            case('report'):
+                params.reportId = this.config.id;
+                break;
+            case('system'):
+                params.systemId = this.config.id;
+                break;
+            case('device'):
+                params.deviceId = this.config.id;
+                break;
         };
 
-        if (this.type == 'device') {
-            params.deviceId = this.data.id;
-        };
+        const response = await this.config.service.unsubscribe(params);
 
-        const response = await this.service.updatesubscriber(params);
-      
         this.loading = false;
+
+        if (response.ok) {
+            for (let i = 0; i < this.users.data.length; i++) {
+                if (this.users.data[i].email == email) {
+                    this.users.data.splice(i, 1);
+                    break;
+                };
+            };
+            this.users.data = JSON.parse(JSON.stringify(this.users.data));
+            this.toast.success('user was unsubscribed');
+        } else {
+            this.toast.error('issue unsubscribing user');
+        };
     };
 
-    public editing(user) {
-        let allowed: boolean = true;
+    public async updatesubscriber(email, role) {
+        this.loading = true;
 
-        if (this.role < 4) {
-            allowed = false;
+        let params: any = {
+            'role':     role.value,
+            'email':    email
         };
 
-        if (user.role >= this.role) {
-            allowed = false;
+        switch(this.config.type) {
+            case('zone'):
+                params.zoneId = this.config.id;
+                break;
+            case('group'):
+                params.groupId = this.config.id;
+                break;
+            case('mimic'):
+                params.mimicId = this.config.id;
+                break;
+            case('people'):
+                params.peopleId = this.config.id;
+                break;
+            case('report'):
+                params.reportId = this.config.id;
+                break;
+            case('system'):
+                params.systemId = this.config.id;
+                break;
+            case('device'):
+                params.deviceId = this.config.id;
+                break;
         };
 
-        if (user.email >= this.email) {
-            allowed = false;
-        };
+        const response = await this.config.service.get(params);
 
-        return allowed;
+        this.loading = false;
+
+        if (response.ok) {
+            this.toast.success('user role updated');
+        } else {
+            this.toast.error('issue updating user role');
+        };
     };
 
-    ngOnInit() {
-        this.email = this.localstorage.get('email');
+    ngOnInit(): void {
         this.get();
     };
-}
 
-interface SubscribersParams {
-    'id':      string;
-    'type':    string;
-    'service': any;
+    ngOnDestroy(): void {};
+
 }

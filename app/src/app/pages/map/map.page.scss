@@ -1,0 +1,10 @@
+agm-map {
+    width:  100%;
+    height: calc(100% - 56px);
+}
+mat-button-toggle-group {
+    top:        70px;
+    right:      12px;
+    z-index:    100;
+    position:   fixed;
+}
