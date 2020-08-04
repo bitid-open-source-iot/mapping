@@ -56,8 +56,8 @@ export class MapPage implements OnInit, OnDestroy {
             'filter': [
                 'role',
                 'type',
-                'bounds',
                 'zoneId',
+                'position',
                 'description'
             ]
         });
@@ -288,6 +288,14 @@ export class MapPage implements OnInit, OnDestroy {
         };
     };
 
+    public async CircleMouseUp($event, zone) {
+        zone.holding = false;
+    };
+
+    public async CircleMouseDown($event, zone) {
+        zone.holding = true;
+    };
+
     public async PolygonPathsChange($event, zone) {
         this.loading = true;
 
@@ -309,24 +317,26 @@ export class MapPage implements OnInit, OnDestroy {
     };
 
     public async CircleCenterChange(center, zone) {
-        this.loading = true;
+        if (!zone.holding) {
+            this.loading = true;
 
-        zone.position.latitude  = center.latitude
-        zone.position.longitude = center.longitude
+            zone.position.latitude  = center.lat;
+            zone.position.longitude = center.lng;
 
-        const response = await this.zones.update({
-            'type':     'circle',
-            'zoneId':   zone.zoneId,
-            'position': zone.position
-        });
+            const response = await this.zones.update({
+                'type':     'circle',
+                'zoneId':   zone.zoneId,
+                'position': zone.position
+            });
 
-        if (response.ok) {
-            this.toast.success('zone was updated');
-        } else {
-            this.toast.error('zone failed to updated');
+            if (response.ok) {
+                this.toast.success('zone was updated');
+            } else {
+                this.toast.error('zone failed to updated');
+            };
+            
+            this.loading = false;
         };
-        
-        this.loading = false;
     };
 
     public async CircleRadiusChange(radius, zone) {
