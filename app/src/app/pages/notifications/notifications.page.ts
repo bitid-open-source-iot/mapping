@@ -37,6 +37,10 @@ export class NotificationsPage implements OnInit, OnDestroy {
                 'title',
                 'message'
             ],
+            'appId': [
+                '000000000000000000000002',
+                '000000000000000000000014'
+            ],
             'sort': {
                 [this.sort.key]: (this.sort.reverse ? -1 : 1)
             },
