@@ -1,0 +1,59 @@
+<mat-toolbar color="primary">
+    <label class="page-title spacer">
+        Device History
+    </label>
+
+    <button mat-icon-button (click)="close()">
+        <mat-icon svgIcon="close"></mat-icon>
+    </button>
+</mat-toolbar>
+
+<mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+
+<form [formGroup]="form" (ngSubmit)="!form.invalid && submit()">
+    <section>
+        <mat-form-field appearance="outline">
+            <mat-label>
+                from
+            </mat-label>
+            
+            <input matInput type="date" name="from" placeholder="from" formControlName="from" required>
+
+            <mat-error *ngIf="errors.from">
+                {{ errors.from }}
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>
+                to
+            </mat-label>
+            
+            <input matInput type="date" name="to" placeholder="to" formControlName="to" required>
+
+            <mat-error *ngIf="errors.to">
+                {{ errors.to }}
+            </mat-error>
+        </mat-form-field>
+    </section>
+
+    <mat-form-field appearance="outline">
+        <mat-label>
+            Device
+        </mat-label>
+        
+        <mat-select name="deviceId" placeholder="device" formControlName="deviceId" required>
+            <mat-option *ngFor="let device of devices" [value]="device.deviceId">
+                {{ device.description }}
+            </mat-option>
+        </mat-select>
+
+        <mat-error *ngIf="errors.deviceId">
+            {{ errors.deviceId }}
+        </mat-error>
+    </mat-form-field>
+
+    <button type="submit" mat-flat-button color="primary">
+        submit
+    </button>
+</form>

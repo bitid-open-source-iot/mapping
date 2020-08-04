@@ -31,10 +31,10 @@ export class DevicesService {
 		return response;
 	};
 
-	public async list(params) {
+	public async list(params, skip?: boolean) {
 		const response = await this.api.post(environment.telemetry, '/telemetry/devices/list', params);
 
-		if (response.ok) {
+		if (response.ok && !skip) {
 			this.data = response.result;
 			this.data.map(device => {
 				if (typeof(device.icon) != 'undefined' && device.icon !== null && typeof(device.location) != 'undefined' && device.location !== null) {

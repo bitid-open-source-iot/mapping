@@ -19,8 +19,12 @@ export class AppComponent implements OnInit {
     @ViewChild(SplashScreen, {'static': true})  private splashscreen:   SplashScreen;
 
     constructor(public menu: MenuService, private socket: DataSocketService, private account: AccountService, private sanitizer: DomSanitizer, private registry: MatIconRegistry) {
+        this.registry.addSvgIcon('edit', this.sanitizer.bypassSecurityTrustResourceUrl('./assets/edit.svg'));
         this.registry.addSvgIcon('drag', this.sanitizer.bypassSecurityTrustResourceUrl('./assets/drag.svg'));
+        this.registry.addSvgIcon('close', this.sanitizer.bypassSecurityTrustResourceUrl('./assets/close.svg'));
         this.registry.addSvgIcon('signal', this.sanitizer.bypassSecurityTrustResourceUrl('./assets/signal.svg'));
+        this.registry.addSvgIcon('search', this.sanitizer.bypassSecurityTrustResourceUrl('./assets/search.svg'));
+        this.registry.addSvgIcon('history', this.sanitizer.bypassSecurityTrustResourceUrl('./assets/history.svg'));
         this.registry.addSvgIcon('battery', this.sanitizer.bypassSecurityTrustResourceUrl('./assets/battery.svg'));
         this.registry.addSvgIcon('zoom-in', this.sanitizer.bypassSecurityTrustResourceUrl('./assets/zoom-in.svg'));
         this.registry.addSvgIcon('zoom-out', this.sanitizer.bypassSecurityTrustResourceUrl('./assets/zoom-out.svg'));

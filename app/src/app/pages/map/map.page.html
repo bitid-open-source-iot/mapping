@@ -11,10 +11,12 @@
 
     <search placeholder="search zones & devices"></search>
 
+    <button mat-icon-button (click)="ViewHistory()">
+        <mat-icon svgIcon="history"></mat-icon>
+    </button>
+
     <button mat-icon-button (click)="ToggleEditor()">
-        <mat-icon>
-            edit
-        </mat-icon>
+        <mat-icon svgIcon="edit"></mat-icon>
     </button>
 </mat-toolbar>
 
@@ -38,16 +40,34 @@
     </mat-button-toggle>
 </mat-button-toggle-group>
 
+<div class="history-mode" *ngIf="history.enabled">
+    <label>
+        viewing history for
+
+        <h1>
+            {{ history.description }}
+        </h1>
+    </label>
+    
+    <button mat-icon-button (click)="CloseHistory()">
+        <mat-icon svgIcon="close"></mat-icon>
+    </button>
+</div>
+
 <agm-map [fitBounds]="true">
-    <agm-marker-cluster imagePath="https://raw.githubusercontent.com/googlemaps/v3-utility-library/master/markerclustererplus/images/m">
-        <agm-marker *ngFor="let device of devices.data" [iconUrl]="device.location.icon.url" [latitude]="device.location.latitude" [longitude]="device.location.longitude" [agmFitBounds]="true" (markerClick)="ViewDevice(device)" [markerClickable]="true"></agm-marker>
+    <agm-marker-cluster imagePath="https://raw.githubusercontent.com/googlemaps/v3-utility-library/master/markerclustererplus/images/m" *ngIf="!history.enabled">
+        <agm-marker *ngFor="let device of devices.data" [iconUrl]="device.location.icon.url" [latitude]="device.location.latitude" [longitude]="device.location.longitude" [visible]="!history.enabled" [agmFitBounds]="true" (markerClick)="ViewDevice(device)" [markerClickable]="true"></agm-marker>
     </agm-marker-cluster>
 
-    <agm-polygon *ngFor="let zone of zones.data" [attr.id]="zone.zoneId" [paths]="zone.points" [visible]="zone.visible" [editable]="editing" [clickable]="true" (polyClick)="ViewZone(zone)" (polyPathsChange)="ZonePathsChange($event, zone)"></agm-polygon>
+    <agm-circle *ngFor="let circle of circles" [radius]="circle.position.radius" [latitude]="circle.position.latitude" [longitude]="circle.position.longitude" [editable]="editing" [visible]="!history.enabled" [strokeWeight]="0" [circleDraggable]="editing" (centerChange)="CircleCenterChange($event, circle)" (radiusChange)="CircleRadiusChange($event, circle)"></agm-circle>
 
-    <!-- <agm-polyline strokeColor="#3F51B5" strokeWeight="4" [visible]="HistoryLineEnabled">
-        <agm-polyline-point *ngFor="let point of historical" [latitude]="point.location.latitude" [longitude]="point.location.longitude"></agm-polyline-point>
+    <agm-polygon *ngFor="let polygon of polygons" [paths]="polygon.position" [editable]="editing" [visible]="!history.enabled" [strokeWeight]="0" [polyDraggable]="editing" (polyDragEnd)="PolygonDragEnd($event, polygon)" (polyDragStart)="PolygonDragStart($event, polygon)" (polyPathsChange)="PolygonPathsChange($event, polygon)"></agm-polygon>
+
+    <agm-rectangle *ngFor="let rectangle of rectangles" [east]="rectangle.position.east" [west]="rectangle.position.west" [north]="rectangle.position.north" [south]="rectangle.position.south" [editable]="editing" [visible]="!history.enabled" [strokeWeight]="0" [rectangleDraggable]="editing" (mouseDown)="RectangleMouseDown($event, rectangle)" (mouseUp)="RectangleMouseUp($event, rectangle)" (boundsChange)="RectangleBoundsChange($event, rectangle)"></agm-rectangle>
+
+    <agm-polyline strokeColor="#3F51B5" strokeWeight="6" [visible]="history.enabled">
+        <agm-polyline-point *ngFor="let point of history.data" [latitude]="point.location.latitude" [longitude]="point.location.longitude"></agm-polyline-point>
     </agm-polyline>
 
-    <agm-marker [visible]="TrackerMarker.visible" [latitude]="TrackerMarker.latitude" [longitude]="TrackerMarker.longitude" fillColor="#3F51B5" strokeColor="#3F51B5"></agm-marker> -->
+    <agm-marker *ngFor="let point of history.data" [iconUrl]="point.icon.url" [visible]="history.enabled" [latitude]="point.location.latitude" [longitude]="point.location.longitude" [agmFitBounds]="true"></agm-marker>
 </agm-map>

@@ -2,6 +2,6 @@
     <input type="text" [autofocus]="true" matInput [placeholder]="placeholder" [(ngModel)]="value" (ngModelChange)="changes($event)" [hidden]="!active">
 
     <button mat-icon-button (click)="toggle()">
-        <mat-icon [color]="color" matTooltip="active devices">{{ active ? 'close' : 'search' }}</mat-icon>
+        <mat-icon [color]="color" [svgIcon]="active ? 'close' : 'search'" [matTooltip]="placeholder"></mat-icon>
     </button>
 </div>

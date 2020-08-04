@@ -8,3 +8,31 @@ mat-button-toggle-group {
     z-index:    100;
     position:   fixed;
 }
+.history-mode {
+    top:                70px;
+    left:               12px;
+    width:              300px;
+    height:             56px;
+    z-index:            100;
+    display:            flex;
+    position:           fixed;
+    align-items:        center;
+    border-radius:      4px;
+    flex-direction:     row;
+    text-transform:     uppercase;
+    justify-content:    center;
+    background-color:   #FAFAFA;
+    label {
+        flex:       1 auto;
+        color:      #212121;
+        margin:     2px 5px;
+        height:     52px;
+        font-size:  10px;
+        h1 {
+            font-size: 18px;
+        }
+    }
+    button {
+        margin: 0px 5px;
+    }
+}
