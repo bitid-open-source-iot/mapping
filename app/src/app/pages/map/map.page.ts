@@ -106,20 +106,20 @@ export class MapPage implements OnInit, OnDestroy {
             if (params) {
                 this.loading = true;
 
-                // const response = await this.devices.historical({
-                //     'filter': [
-                //         'deviceDate',
-                //         'location.latitude',
-                //         'location.longitude'
-                //     ],
-                //     // 'sort': {
-                //     //     'deviceDate': 1
-                //     // },
-                //     'to':       params.to,
-                //     'from':     params.from,
-                //     'limit':    10000,
-                //     'deviceId': params.deviceId
-                // });
+                const response = await this.devices.historical({
+                    'filter': [
+                        'deviceDate',
+                        'location.latitude',
+                        'location.longitude'
+                    ],
+                    // 'sort': {
+                    //     'deviceDate': 1
+                    // },
+                    'to':       params.to,
+                    'from':     params.from,
+                    'limit':    10000,
+                    'deviceId': params.deviceId
+                });
 
                 this.history.to         = params.to;
                 this.history.from       = params.from;
@@ -132,33 +132,14 @@ export class MapPage implements OnInit, OnDestroy {
                     };
                 };
 
-                // if (response.ok) {
-                    let data: any[] = [
-                        {
-                            'location': {
-                                'latitude':     0,
-                                'longitude':    0
-                            }
-                        },
-                        {
-                            'location': {
-                                'latitude':     1,
-                                'longitude':    1
-                            }
-                        },
-                        {
-                            'location': {
-                                'latitude':     2,
-                                'longitude':    2.5
-                            }
-                        }
-                    ];
+                if (response.ok) {
+                    let data: any[] = [];
 
-                    // response.result.sort((a, b) => {
-                    //     if (a.location.latitude != b.location.latitude && a.location.longitude != b.location.longitude) {
-                    //         data.push(b);
-                    //     };
-                    // });
+                    response.result.sort((a, b) => {
+                        if (a.location.latitude != b.location.latitude && a.location.longitude != b.location.longitude) {
+                            data.push(b);
+                        };
+                    });
 
                     for (let i = 0; i < data.length; i++) {
                         data[i].icon        = new MapPointIcon(i + 1);
@@ -167,9 +148,9 @@ export class MapPage implements OnInit, OnDestroy {
 
                     this.history.data       = data;
                     this.history.enabled    = true;
-                // } else {
-                //     this.toast.error('no history found for selected dates');
-                // };
+                } else {
+                    this.toast.error('no history found for selected dates');
+                };
 
                 this.loading = false;
             };
