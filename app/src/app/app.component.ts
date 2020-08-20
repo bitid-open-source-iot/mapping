@@ -3,6 +3,7 @@ import { MenuService } from './services/menu/menu.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { SplashScreen } from './splashscreen/splashscreen.component';
 import { AccountService } from './services/account/account.service';
+import { HistoryService } from './services/history/history.service';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DataSocketService } from './services/data-socket/data-socket.service';
 import { OnInit, Component, ViewChild } from '@angular/core';
@@ -18,7 +19,7 @@ export class AppComponent implements OnInit {
     @ViewChild(MatSidenav, {'static': true})    private sidenav:        MatSidenav;
     @ViewChild(SplashScreen, {'static': true})  private splashscreen:   SplashScreen;
 
-    constructor(public menu: MenuService, private socket: DataSocketService, private account: AccountService, private sanitizer: DomSanitizer, private registry: MatIconRegistry) {
+    constructor(public menu: MenuService, private socket: DataSocketService, private history: HistoryService, private account: AccountService, private sanitizer: DomSanitizer, private registry: MatIconRegistry) {
         this.registry.addSvgIcon('edit', this.sanitizer.bypassSecurityTrustResourceUrl('./assets/edit.svg'));
         this.registry.addSvgIcon('drag', this.sanitizer.bypassSecurityTrustResourceUrl('./assets/drag.svg'));
         this.registry.addSvgIcon('close', this.sanitizer.bypassSecurityTrustResourceUrl('./assets/close.svg'));
@@ -45,6 +46,7 @@ export class AppComponent implements OnInit {
     private async initialize() {
         await this.splashscreen.show();
 
+        await this.history.init();
         await this.menu.init(this.sidenav);
         await this.account.validate();
 

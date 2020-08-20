@@ -19,7 +19,7 @@ try {
                     "code":         401,
                     "reason":       "Portal Error",
                     "message":      "Portal Error",
-                    "locaction":    "portal",
+                    "location":    "portal",
                     "locationType": "portal"
                 }]
             },

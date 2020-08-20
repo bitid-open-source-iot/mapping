@@ -20,6 +20,7 @@ import { ToastService } from './services/toast/toast.service';
 import { ZonesService } from './services/zones/zones.service';
 import { DevicesService } from './services/devices/devices.service';
 import { AccountService } from './services/account/account.service';
+import { HistoryService } from './services/history/history.service';
 import { FormErrorService } from './services/form-error/form-error.service';
 import { DataSocketService } from './services/data-socket/data-socket.service';
 import { LocalstorageService } from './services/localstorage/localstorage.service';
@@ -56,6 +57,7 @@ import { environment } from '../environments/environment';
         ToastService,
         DevicesService,
         AccountService,
+        HistoryService,
         FormErrorService,
         DataSocketService,
         LocalstorageService,

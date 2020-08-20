@@ -96,10 +96,10 @@
                 line-height:    12px;
             }
         }
-        .item:nth-child(1) {
+        .item:first-child {
             border-left: none;
         }
-        .item:nth-child(3) {
+        .item:last-child {
             border-right: none;
         }
     }
